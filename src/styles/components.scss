@@ -41,17 +41,27 @@ button{
     color: blueviolet
 }
 
-.ProgressBar {
+.progress {
     border: 1px solid indigo;
     border-radius: 5px;
     height: 25px;
     margin-bottom: 20px;
     padding: 5px;
 
-    > div {
+    &--big {
+        height: 50px;
+    }
+    
+    &--color-blue {
+        border-color: mediumpurple;
+    }
+    
+    &__bar {
         height: 100%;
-        background-color: blue;
-        border-radius: .5rem;
-        float: right;
+        background-color: mediumpurple; 
+    }
+    
+    &--color-blue &__bar {
+        border-color: mediumpurple;
     }
 }

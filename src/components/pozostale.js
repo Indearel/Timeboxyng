@@ -1,17 +1,17 @@
-import uuid from "uuid";
-import Clock from "./Clock";
 import React from "react";
+import uuid from "uuid";
+
+import Clock from "./Clock";
 
 function ProgressBar({ className = "", percent = 33 }) {
     return (
-        <div className={"ProgressBar " + className}>
-            <div style={{width: `${percent}%`}}></div>
+        <div className={"progress progress--big progress-color-blue" + className}>
+            <div className="progress__bar" style={{width: `${percent}%`}}></div>
         </div>
     );
 }
 
-
-function TimeboxEditor (props) {
+function TimeboxEditor(props) {
     const { 
         title, 
         totalTimeInMinutes,
@@ -19,31 +19,34 @@ function TimeboxEditor (props) {
         onTitleChange,
         onTotalTimeInMinutesChange,
         onConfirm
-        } = props;
+    } = props;
     return (
         <div className={`TimeboxEditor ${isEditable ? "" : "inactive"}`}>
-            <label>Co robisz? <input 
-                disabled={!isEditable}
-                value = {title}
-                onChange={onTitleChange}
-                type="text" 
+            <label>
+                Co robisz?
+                <input 
+                    disabled={!isEditable} 
+                    value={title}
+                    onChange={onTitleChange} 
+                    type="text" 
                 />
-                </label><br/>
-            <label>Ile minut? <input 
-                disabled={!isEditable}
-                value = {totalTimeInMinutes}
-                onChange={onTotalTimeInMinutesChange}
-                type="number" 
+            </label><br/>
+            <label>
+                Ile minut?
+                <input 
+                    disabled={!isEditable} 
+                    value={totalTimeInMinutes}
+                    onChange={onTotalTimeInMinutesChange} 
+                    type="number" 
                 />
-                </label><br />
+            </label><br />
             <button 
-            onClick={onConfirm}
-            disabled={isEditable}
-            >Zatwierdz zmiany</button>
+                onClick={onConfirm}
+                disabled={!isEditable}
+            >Zatwierdź zmiany</button>
         </div>
     )
 }
-
 
 class CurrentTimebox extends React.Component {
     constructor(props) {
@@ -104,7 +107,7 @@ class CurrentTimebox extends React.Component {
     }
     render() {
         const { isPaused, isRunning, pausesCount, elapsedTimeInSeconds } = this.state;
-        const {title, totalTimeInMinutes, isEditable, onEdit } = this.props;
+        const { title, totalTimeInMinutes, isEditable, onEdit } = this.props;
         const totalTimeInSeconds = totalTimeInMinutes * 60;
         const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
         const minutesLeft = Math.floor(timeLeftInSeconds / 60);
@@ -127,15 +130,15 @@ class CurrentTimebox extends React.Component {
 
 class EditableTimebox extends React.Component {
     state = {
-        title: "Uczem siem wyciągać stan w gurem!", 
+        title: "Uczę się CSS!",
         totalTimeInMinutes: 20,
         isEditable: true
     }
     handleTitleChange = (event) => {
-        this.setState({ totalTimeInMinutes: event.target.value});
+        this.setState({ title: event.target.value });
     }
     handleTotalTimeInMinutesChange = (event) => {
-        this.setState({ title: event.target.value});
+        this.setState({ totalTimeInMinutes: event.target.value });
     }
     handleConfirm = () => {
         this.setState({ isEditable: false });
@@ -156,10 +159,11 @@ class EditableTimebox extends React.Component {
                     onTotalTimeInMinutesChange={this.handleTotalTimeInMinutesChange}
                 />
                 <CurrentTimebox 
-                isEditable={isEditable}
-                title={title} 
-                totalTimeInMinutes={totalTimeInMinutes}
-                onEdit={this.handleEdit} />
+                    isEditable={isEditable}
+                    title={title} 
+                    totalTimeInMinutes={totalTimeInMinutes} 
+                    onEdit={this.handleEdit}
+                />
             </>
         )
     }
@@ -173,42 +177,44 @@ class TimeboxCreator extends React.Component {
     }
     handleSubmit = (event) => {
         event.preventDefault(); 
-        this.props.onCreate({
+        this.props.onCreate({ 
             id: uuid.v4(), 
-            title: this.titleInput.current.value,
+            title: this.titleInput.current.value, 
             totalTimeInMinutes: this.totalTimeInMinutesInput.current.value
-        }); 
-        title: this.titleInput.current.value = "";
-        totalTimeInMinutes: this.totalTimeInMinutesInput.current.value = "";
+        });
+        this.titleInput.current.value = "";
+        this.totalTimeInMinutesInput.current.value = "";
     }
-    render () {
+
+    render() {
         return (
             <form onSubmit={this.handleSubmit} className="TimeboxCreator">
-                <label>Co robisz? 
+                <label>
+                    Co robisz?
                     <input 
-                   ref={this.titleInput}
-                    type="text" 
+                        ref={this.titleInput}
+                        type="text" 
                     />
-                    </label><br/>
-                <label>Ile minut? 
+                </label><br/>
+                <label>
+                    Ile minut?
                     <input 
-                    ref={this.totalTimeInMinutesInput}
-                    type="number" 
+                        ref={this.totalTimeInMinutesInput}
+                        type="number" 
                     />
-                    </label><br />
+                </label><br />
                 <button 
                 >Dodaj timebox</button>
             </form>
         )
     }
 }
-
-class TimeboxList extends React.Component{
+class TimeboxList extends React.Component {
     state = {
         timeboxes: [
-            { id: "a", title: "Uczem siem list", totalTimeInMinutes: 25}, 
-            { id: "b", title: "Uczem siem formularzy", totalTimeInMinutes: 15}, 
-            { id: "c", title: "Uczem siem komponentów niekontrolowanych", totalTimeInMinutes: 5}
+            { id: "a", title: "Uczę się CSS in JS", totalTimeInMinutes: 25 },
+            { id: "b", title: "Uczę się SASS", totalTimeInMinutes: 15 },
+            { id: "c", title: "Uczę się BEM", totalTimeInMinutes: 5 },
         ]
     }
 
@@ -234,33 +240,31 @@ class TimeboxList extends React.Component{
     }
 
     handleCreate = (createdTimebox) => {
-        this.addTimebox(createdTimebox)
+        this.addTimebox(createdTimebox);
     }
-    render () {
+    render() {
         return (
             <>
-                <TimeboxCreator onCreate={this.handleCreate}/>
+                <TimeboxCreator onCreate={this.handleCreate} />
                 {this.state.timeboxes.map((timebox, index) => (
-                <Timebox 
-                    key={timebox.id} 
-                    title={timebox.title} 
-                    totalTimeInMinutes={timebox.totalTimeInMinutes} 
-                    onDelete={() => this.removeTimebox(index)}
-                    onEdit={() => this.updateTimebox(index, {...timebox, title: "Updated Timebox"})}
-                />
+                    <Timebox 
+                        key={timebox.id} 
+                        title={timebox.title} 
+                        totalTimeInMinutes={timebox.totalTimeInMinutes}
+                        onDelete={() => this.removeTimebox(index)}
+                        onEdit={() => this.updateTimebox(index, {...timebox, title: "Updated timebox"})}
+                    />
                 ))}
             </>
         )
     }
 }
-
 function Timebox({ title, totalTimeInMinutes, onDelete, onEdit }) {
     return (
-        <div className ="Timebox">
+        <div className="Timebox">
             <h3>{title} - {totalTimeInMinutes} min.</h3>
-            <button onClick={onDelete} >Usuń</button> 
-            <button onClick={onEdit} >Zmień</button> 
-            <input />
+            <button onClick={onDelete} >Usuń</button>
+            <button onClick={onEdit}>Zmień</button>
         </div>
     )
 }
